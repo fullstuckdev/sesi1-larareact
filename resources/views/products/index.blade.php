@@ -9,9 +9,6 @@
 <body>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-12 mb-3">
-                <a href="{{ url('/products/create') }}" class="btn btn-primary">Create Product</a>
-            </div>
             @foreach($products as $product)
                 <div class="col-md-4 mb-4">
                     <div class="card">
@@ -20,18 +17,11 @@
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">Rp {{ $product->price }}</p>
                             <p class="card-text">{{ $product->description }}</p>
-                        </div>
-                        <div class="card-footer d-flex justify-content-between">
-                            <div>
-                                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary">Edit</a>
-                            </div>
-                            <div>
-                                <form action="{{ route('products.destroy', $product->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </div>
+                            @auth
+                                <a href="#" class="btn btn-primary">Beli Barang</a>
+                            @else
+                                <a href="/login" class="btn btn-primary">Beli Barang</a>
+                            @endauth
                         </div>
                     </div>
                 </div>

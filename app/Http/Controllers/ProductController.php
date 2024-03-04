@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,10 +15,11 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
+
     public function create()
     {
-        return view('products.create');
-    }
+        $categories = Category::all();
+        return view('products.create', ['categories' => $categories]);    }
 
     public function store(Request $request)
     {
@@ -26,6 +28,7 @@ class ProductController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category_id' => 'required',
         ]);
 
         $imageName = time().'.'.$request->image->extension();
@@ -36,6 +39,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'image' => 'images/' . $imageName,
+            'category_id' => $request->category_id
         ]);
 
         return redirect('/products/create')->with('success', 'Product created successfully.');
@@ -79,4 +83,12 @@ class ProductController extends Controller
 
     return redirect('/products')->with('success', 'Product deleted successfully.');
 }
+
+public function show()
+{
+    $products = Product::all();
+    return view('home.products', compact('products'));
+}
+
+
 }
